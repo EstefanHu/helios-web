@@ -3,14 +3,14 @@
 import { connectToDatabase } from '@/lib/config/postgres.js';
 const { pool } = connectToDatabase();
 
-export async function getEntry(slug) {
+export async function getEntry(slug, travelerId) {
   const client = await pool.connect();
   try {
-    const res = await client.query('SELECT * FROM entry WHERE slug = $1', [slug]);
+    const res = await client.query('SELECT * FROM entry WHERE slug = $1 AND traveler_id = $2', [slug, travelerId]);
 
     return res.rows;
   } catch (error) {
-    console.log(error);
+    return { code: 500, message: 'could not fetch entry.' };
   } finally {
     client.release();
   }
@@ -33,7 +33,7 @@ export async function getTodaysEntry() {
 
     return { code: 200, payload: rows[0] };
   } catch (error) {
-    console.log(error);
+    return { code: 500, message: 'could not fetch todays entry.' };
   } finally {
     client.release();
   }
@@ -43,24 +43,24 @@ export async function getEntries(userId, limit, offset) {
   const client = await pool.connect();
   const query = 'SELECT * FROM entry WHERE traveler_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3';
   try {
-    const res = await client.query(query, [userId, limit, offset]);
+    const { rows } = await client.query(query, [userId, limit, offset]);
 
-    return res.rows;
+    return { code: 200, entries: rows };
   } catch (error) {
-    console.log(error);
+    return { code: 500, message: 'could not fetch entries.' };
   } finally {
     client.release();
   }
 }
 
-export async function getEntryCount() {
+export async function getEntryCount(travelerId) {
   const client = await pool.connect();
   try {
-    const res = await client.query('SELECT count(*) FROM entry');
+    const res = await client.query('SELECT count(*) FROM entry WHERE traveler_id = $1', [travelerId]);
 
     return res.rows[0];
   } catch (error) {
-    console.log(error);
+    return { code: 500, message: 'could not get entry count.' };
   } finally {
     client.release();
   }
