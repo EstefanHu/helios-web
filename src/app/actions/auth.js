@@ -70,7 +70,7 @@ export async function login(emailAddress, password) {
       payload: { message: 'continuing journey' },
     };
   } catch (error) {
-    return { code: 401 };
+    return { code: 401, payload: { message: 'Email or Password were incorrect' } };
   } finally {
     client.release();
   }

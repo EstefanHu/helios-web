@@ -20,8 +20,7 @@ export default async function AppLayout({ children }) {
   const query = `
                   SELECT
                     traveler.id AS "travelerId",
-                    traveler.first_name AS "firstName",
-                    traveler.last_name AS "lastName",
+                    traveler.name AS "name",
                     traveler.email_address AS "emailAddress",
                     traveler.email_confirmed AS "emailConfirmed", 
                     settings.is_dark AS "isDark", 

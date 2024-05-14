@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS traveler (
   email_confirmed BOOLEAN DEFAULT FALSE,
   first_name      VARCHAR(50),
   last_name       VARCHAR(50),
+  name            VARCHAR(80),
   password        VARCHAR(100) NOT NULL,
   created_at      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

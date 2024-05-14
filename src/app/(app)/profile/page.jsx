@@ -1,45 +1,45 @@
-import Logout from './Logout';
+'use client';
+import { useContext, useState } from 'react';
+import { updateTraveler } from '@/app/actions/traveler.js';
+import { TravelerContext } from '@/app/(app)/ContextProvider.jsx';
 import styles from './Profile.module.scss';
-import ProfileElement from './ProfileElement';
+import Link from 'next/link';
 
 export default function Profile() {
+  const { traveler } = useContext(TravelerContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState(traveler);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
+    await updateTraveler(formData);
+    // TODO: Launch Toast
+    setIsLoading(false);
+  };
+
   return (
     <div className={styles.profileWrapper}>
-      <h2>settings</h2>
-      <section>
-        <div className={styles.settings}>
-          <span>
-            <h3>target word count</h3>
-          </span>
+      <form onSubmit={handleUpdate}>
+        <label>traveler</label>
+        <input type='text' value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+        <p>Your name is how we will refer to you. You can remove it at any time.</p>
 
-          <span>
-            <h3>reminders</h3>
-          </span>
-        </div>
-      </section>
+        <label>email address</label>
+        <h2>{traveler.emailAddress}</h2>
+        <p>
+          You can manage your email addresses in your <Link href='/profile/email'>email settings</Link>.
+        </p>
 
-      <h2>account</h2>
-      <section>
-        <div className={styles.profile}>
-          <p>
-            <span>traveler:</span> <ProfileElement property='firstName' /> <ProfileElement property='lastName' />
-          </p>
+        <label>password</label>
+        <h2>**********</h2>
+        <p>
+          Manage your security settings <Link href='/profile/security'>here</Link>.
+        </p>
 
-          <p>
-            <span>email:</span> <ProfileElement property='emailAddress' />
-          </p>
-
-          <p>
-            <span>email confirmed:</span> <ProfileElement property='emailConfirmed' />
-          </p>
-        </div>
-
-        <div className={styles.account}>
-          <p>billing: </p>
-        </div>
-      </section>
-
-      <Logout />
+        <input type='submit' value='update traveler' />
+      </form>
     </div>
   );
 }

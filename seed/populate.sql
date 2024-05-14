@@ -1,22 +1,20 @@
 INSERT INTO
-    traveler(id, email_address, first_name, last_name, password)
+    traveler(id, email_address, name, password)
 VALUES
     (
         'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
         'g.host@gmail.com',
-        'Gary',
-        'Host',
+	'Gary Host',
         '$2b$10$RkQSoUqiyHCvQ06/Ak7mEeBm0zFKtA2ucWRf9AvrU2Fe50fOXo5bi'
     );
 
 INSERT INTO
-    traveler(id, email_address, first_name, last_name, password)
+    traveler(id, email_address, name, password)
 VALUES
     (
         '23ad58e5-026b-4f2e-bcce-129cd34694cb',
         'your.mom@gmail.com',
-        'Your',
-        'Mom',
+	'Your Mom',
         '$2b$10$RkQSoUqiyHCvQ06/Ak7mEeBm0zFKtA2ucWRf9AvrU2Fe50fOXo5bi'
     );
 

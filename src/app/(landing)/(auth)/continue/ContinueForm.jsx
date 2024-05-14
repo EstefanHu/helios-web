@@ -32,7 +32,10 @@ export default function ContinueForm() {
     if (errors.password !== '' || errors.emailAddress !== '') return setErrorData(errors);
 
     setIsLoading(true);
-    const { code, payload } = await login(emailAddress, password);
+    const {
+      code,
+      payload: { message },
+    } = await login(emailAddress, password);
     setIsLoading(false);
 
     if (code !== 200) return setErrorData({ emailAddress: message, password: message });
