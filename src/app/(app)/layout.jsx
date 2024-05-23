@@ -43,13 +43,15 @@ export default async function AppLayout({ children }) {
           <header>
             <PageName />
 
-            <div className={styles.search}>
-              <SearchInput />
-            </div>
+            <span>
+              <Link href='/write' className={styles.write}>
+                write
+              </Link>
 
-            <Link href='/profile'>
-              <MdPersonOutline />
-            </Link>
+              <Link href='/profile' className={styles.profile}>
+                <MdPersonOutline />
+              </Link>
+            </span>
           </header>
 
           <div className={styles.contentWrapper}>

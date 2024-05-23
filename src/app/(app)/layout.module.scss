@@ -4,6 +4,7 @@
   background-color: var(--background);
   display: flex;
   overflow: hidden;
+  padding-bottom: 0px;
 
   .appNav {
     background-color: var(--background);
@@ -41,6 +42,61 @@
       background-color: var(--background);
       border-bottom: 1px solid var(--borderColor);
       padding: 0 20px;
+      z-index: 100;
+
+      span {
+        display: flex;
+        width: fit-content;
+        align-items: center;
+
+        .write {
+          height: 40px;
+          padding: 0 20px;
+          background-color: var(--background);
+          color: var(--accent);
+          cursor: pointer;
+          transition: background-color 0.2s;
+          border: 2px solid var(--accent);
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          margin-right: 20px;
+
+          &:hover {
+            background-color: var(--accent);
+            color: var(--text);
+          }
+
+          @media (min-width: 1200px) {
+            display: none;
+          }
+        }
+
+        .profile {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: var(--backgroundAccent);
+          text-transform: capitalize;
+          height: 40px;
+          width: 40px;
+          border-radius: 20px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--text);
+          cursor: pointer;
+          transition: background-color 0.2s;
+
+          svg {
+            width: 20px;
+            height: 20px;
+          }
+
+          &:hover {
+            background-color: var(--backgroundAccentHover);
+          }
+        }
+      }
 
       .search {
         background-color: var(--backgroundAccent);
@@ -74,31 +130,6 @@
         font-weight: bold;
         cursor: pointer;
         color: var(--text);
-      }
-
-      a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--backgroundAccent);
-        text-transform: capitalize;
-        height: 40px;
-        width: 40px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--text);
-        cursor: pointer;
-        transition: background-color 0.2s;
-
-        svg {
-          width: 20px;
-          height: 20px;
-        }
-
-        &:hover {
-          background-color: var(--backgroundAccentHover);
-        }
       }
     }
 
