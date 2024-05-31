@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useContext } from 'react';
-import { TravelerContext } from '@/app/(app)/ContextProvider.jsx';
+import { TravelerContext } from '@/lib/context';
 import getHomeContent from '@/app/actions/getHomeContent.js';
 import styles from './Home.module.scss';
 
@@ -12,7 +12,6 @@ export default function HomeContent() {
   useEffect(() => {
     if (!traveler) return;
     getHomeContent(traveler.travelerId).then((res) => {
-      console.log(res);
       setRecentFeed([]);
       setIsLoading(false);
     });

@@ -14,7 +14,7 @@ export default async function getHomeContent(travelerId) {
                         updated_at as "updatedAt",
                         'entry' as "type"
                       FROM entry
-                      WHERE traveler_id = '${travelerId}'
+                      WHERE traveler_id = $1
                       AND journey_id IS NULL
                       AND updated_at::date = (CURRENT_DATE - 1)
 
@@ -26,12 +26,12 @@ export default async function getHomeContent(travelerId) {
                         updated_at as "updatedAt",
                         'journey' as "type"
                       FROM journey
-                      WHERE traveler_id = '${travelerId}'
+                      WHERE traveler_id = $1
                       AND NOW() < end_date
 
                       ORDER BY "updatedAt";
                     `;
-    const { rows } = await client.query(getRecentQuery);
+    const { rows } = await client.query(getRecentQuery, [travelerId]);
 
     return { code: 200, response: rows };
   } catch (error) {

@@ -1,7 +1,7 @@
 'use client';
 import { useContext, useState } from 'react';
 import { updateTraveler } from '@/app/actions/traveler.js';
-import { TravelerContext } from '@/app/(app)/ContextProvider.jsx';
+import { TravelerContext } from '@/lib/context';
 import styles from './Profile.module.scss';
 import Link from 'next/link';
 

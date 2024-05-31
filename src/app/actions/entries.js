@@ -6,34 +6,11 @@ const { pool } = connectToDatabase();
 export async function getEntry(slug, travelerId) {
   const client = await pool.connect();
   try {
-    const res = await client.query('SELECT * FROM entry WHERE slug = $1 AND traveler_id = $2', [slug, travelerId]);
+    const { rows } = await client.query('SELECT * FROM entry WHERE slug = $1 AND traveler_id = $2', [slug, travelerId]);
 
-    return res.rows;
+    return { code: 200, payload: rows };
   } catch (error) {
-    return { code: 500, message: 'could not fetch entry.' };
-  } finally {
-    client.release();
-  }
-}
-
-export async function getTodaysEntry() {
-  const client = await pool.connect();
-
-  try {
-    const query = `
-                    SELECT
-                      id,
-                      title,
-                      slug,
-                      body,
-                      created_at
-                    FROM entry
-                  `;
-    const { rows } = await client.query(query);
-
-    return { code: 200, payload: rows[0] };
-  } catch (error) {
-    return { code: 500, message: 'could not fetch todays entry.' };
+    return { code: 500, payload: 'could not fetch entry.' };
   } finally {
     client.release();
   }

@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { MdPersonOutline } from 'react-icons/md';
-import { AppNav, MobileAppNav, PageName, SearchInput } from './AppLayoutClientComponents';
+import { AppNav, HeaderWriteButton, MobileAppNav, PageName } from './AppLayoutClientComponents';
 import Deauth from './Deauth';
-import { ContextProvider } from './ContextProvider.jsx';
+import { ContextProvider } from '@/lib/context';
 import redis from '@/lib/config/redis.js';
 import { connectToDatabase } from '@/lib/config/postgres.js';
 import styles from './layout.module.scss';
@@ -17,7 +17,7 @@ export default async function AppLayout({ children }) {
   if (!travelerId) return <Deauth />;
 
   const client = await pool.connect();
-  const query = `
+  const sessionQuery = `
                   SELECT
                     traveler.id AS "travelerId",
                     traveler.name AS "name",
@@ -28,12 +28,24 @@ export default async function AppLayout({ children }) {
                   FROM traveler
                   INNER JOIN settings
                   ON traveler.id = settings.traveler_id
-                  WHERE traveler.id = '${travelerId}';
+                  WHERE traveler.id = $1;
                 `;
-  const { rows } = await client.query(query);
 
+  try {
+    const sessionResponse = await client.query(sessionQuery, [travelerId]);
+
+    return <HeliosApp session={sessionResponse.rows[0]}>{children}</HeliosApp>;
+  } catch (error) {
+    //TODO: Add failed login code path
+    return <h1>failure</h1>;
+  } finally {
+    client.release();
+  }
+}
+
+const HeliosApp = ({ children, session }) => {
   return (
-    <ContextProvider currentSession={rows[0]}>
+    <ContextProvider currentSession={session}>
       <div className={styles.wrapper}>
         <nav className={styles.appNav}>
           <AppNav />
@@ -44,9 +56,7 @@ export default async function AppLayout({ children }) {
             <PageName />
 
             <span>
-              <Link href='/write' className={styles.write}>
-                write
-              </Link>
+              <HeaderWriteButton />
 
               <Link href='/profile' className={styles.profile}>
                 <MdPersonOutline />
@@ -63,4 +73,4 @@ export default async function AppLayout({ children }) {
       </div>
     </ContextProvider>
   );
-}
+};

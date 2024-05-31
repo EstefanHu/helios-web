@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -8,11 +8,17 @@ import { BiSolidHomeHeart } from 'react-icons/bi';
 import { GiJourney, GiMirrorMirror } from 'react-icons/gi';
 import { IoIosMore } from 'react-icons/io';
 import { IoLibrary } from 'react-icons/io5';
+import { EntryStateContext } from '@/lib/context';
+import { launchDailyEntry } from '@/lib/helpers/launchDailyEntry.js';
 
 import styles from './AppLayoutClientComponents.module.scss';
 
 function AppNav() {
+  const {
+    entryState: { daily },
+  } = useContext(EntryStateContext);
   const pathname = usePathname();
+  const router = useRouter();
 
   const openMenu = () => {
     console.log('open menu');
@@ -48,9 +54,9 @@ function AppNav() {
         <IoIosMore />
       </button>
 
-      <Link href='/write' className={styles.write}>
+      <button type='button' onClick={() => launchDailyEntry(daily, router)} className={styles.write}>
         write
-      </Link>
+      </button>
     </>
   );
 }
@@ -105,4 +111,17 @@ function SearchInput() {
   );
 }
 
-export { AppNav, MobileAppNav, PageName, SearchInput };
+function HeaderWriteButton() {
+  const {
+    entryState: { daily },
+  } = useContext(EntryStateContext);
+  const router = useRouter();
+
+  return (
+    <button type='button' className={styles.headerWriteButton} onClick={() => launchDailyEntry(daily, router)}>
+      write
+    </button>
+  );
+}
+
+export { AppNav, MobileAppNav, PageName, SearchInput, HeaderWriteButton };

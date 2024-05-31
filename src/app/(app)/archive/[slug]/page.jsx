@@ -17,8 +17,8 @@ export default async function Page({ params }) {
   const heliosAuth = cookies().get('heliosAuth')?.value;
   const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
 
-  const entryResponse = await getEntry(params.slug, travelerId);
-  const entry = entryResponse[0];
+  const { payload } = await getEntry(params.slug, travelerId);
+  const entry = payload[0];
 
   return (
     <section className={viewer.viewerContainer}>

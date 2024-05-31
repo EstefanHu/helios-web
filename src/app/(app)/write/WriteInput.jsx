@@ -1,11 +1,14 @@
 'use client';
-import { useState, useCallback, useEffect, useRef, Dispatch, SetStateAction } from 'react';
+import { useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { EntryStateContext } from '@/lib/context';
+import { getOrCreateEntryBySlug } from '@/app/actions';
 import TextareaAutosize from 'react-textarea-autosize';
 import { RotatingLines } from 'react-loader-spinner';
 import { GoCheck } from 'react-icons/go';
 import { FaRegSave } from 'react-icons/fa';
 import styles from './WriteInput.module.scss';
+import { formatDate } from '@/lib/helpers/formatDate';
 
 const SaveStates = {
   SAVED: 'Saved',
@@ -27,7 +30,7 @@ const save = async (id, body, textRef, router, setSaveState) => {
   if (response.status === 307) router.push('/');
 };
 
-export default function WriteInput({ id, body = '' }) {
+export function WriteInput({ id, body = '' }) {
   const router = useRouter();
   const inputRef = useRef(null);
 
@@ -122,5 +125,42 @@ export default function WriteInput({ id, body = '' }) {
         </span>
       </footer>
     </>
+  );
+}
+
+export function ClientRenderWriteInput({ searchParams }) {
+  const { entryState, setEntryState } = useContext(EntryStateContext);
+  const { daily } = entryState;
+  const [entry, setEntry] = useState(null);
+  const router = useRouter();
+  const { v } = searchParams;
+
+  const getOrCreateDaily = useCallback(async () => {
+    const { payload } = await getOrCreateEntryBySlug(formatDate(new Date()));
+    setEntryState({ ...entryState, daily: payload });
+  }, [entryState, setEntryState]);
+
+  useEffect(() => {
+    switch (v) {
+      case '':
+      case null:
+      case undefined:
+        router.push('/write?v=daily', undefined, { shallow: true });
+      case 'daily':
+        Object.keys(daily).length === 0 ? getOrCreateDaily() : setEntry(daily);
+        break;
+      default:
+        return router.push('/write?v=daily');
+    }
+  }, [v, router, daily, getOrCreateDaily]);
+
+  if (!entry) return <h1>TODO: add loading skeleton</h1>;
+
+  return (
+    <div className={styles.pageWrapper}>
+      <h1 className={styles.title}>{entry.title}</h1>
+
+      <WriteInput id={entry.id} body={entry.body} />
+    </div>
   );
 }

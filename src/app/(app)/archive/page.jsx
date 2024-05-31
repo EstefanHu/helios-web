@@ -5,7 +5,7 @@ import EntryListItem from './EntryListItem';
 import EntryMonthWrapper from './EntryMonthWrapper';
 import styles from './Archive.module.scss';
 import { getEntries, getEntryCount } from '@/app/actions/entries.js';
-import { TravelerContext } from '../ContextProvider';
+import { TravelerContext } from '@/lib/context';
 import { RotatingLines } from 'react-loader-spinner';
 
 export default function Home() {

@@ -23,7 +23,7 @@ export default async function getCurrentSession() {
                       FROM traveler
                       INNER JOIN settings
                       ON traveler.id = settings.traveler_id
-                      WHERE traveler.id = '${travelerId}';
+                      WHERE traveler.id = $1;
                     `;
     const { rows } = await client.query(query);
 

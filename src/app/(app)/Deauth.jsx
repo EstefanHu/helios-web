@@ -1,8 +1,8 @@
 'use client';
 import { useContext, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { logout } from '../actions/auth';
-import { TravelerContext } from './ContextProvider';
+import { TravelerContext } from '@/lib/context';
 
 export default function Deauth() {
   const router = useRouter();

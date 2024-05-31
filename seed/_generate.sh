@@ -63,14 +63,18 @@ if $should_create_database; then
     echo -e "Creating database ${green}\`${db}\`${color_off}"
     psql -qc "CREATE DATABASE ${db}"
 
+    path_to_types="$(pwd)/seed/types.sql"
     path_to_tables="$(pwd)/seed/tables.sql"
     path_to_trigger_traveler="$(pwd)/seed/trigger_traveler.sql"
     path_to_trigger_entry="$(pwd)/seed/trigger_entry.sql"
     path_to_populate="$(pwd)/seed/populate.sql"
+    chmod +x $path_to_types
     chmod +x $path_to_tables
     chmod +x $path_to_trigger_traveler
     chmod +x $path_to_trigger_entry
     chmod +x $path_to_populate
+    echo -e "Adding Types"
+    psql -U helios -d ${db} -q <$path_to_types
     echo -e "Adding Tables"
     psql -U helios -d ${db} -q <$path_to_tables
     echo -e "Setting Triggers"

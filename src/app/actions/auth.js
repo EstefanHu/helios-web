@@ -59,8 +59,8 @@ export async function login(emailAddress, password) {
   const client = await pool.connect();
 
   try {
-    const query = `SELECT id, password FROM traveler WHERE email_address = '${emailAddress}';`;
-    const { rows } = await client.query(query);
+    const query = `SELECT id, password FROM traveler WHERE email_address = $1;`;
+    const { rows } = await client.query(query, [emailAddress]);
     if (rows.length === 0) throw 'failed authentication';
     if (!(await bcrypt.compare(password, rows[0].password))) throw 'failed authentication';
     await setUserSession(rows[0].id);

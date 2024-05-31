@@ -1,6 +1,9 @@
+import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import redis from '@/lib/config/redis.js';
-import WriteInput from './WriteInput';
+import Deauth from '@/app/(app)/Deauth.jsx';
+import { WriteInput, ClientRenderWriteInput } from './WriteInput.jsx';
+import { getEntryBySlug } from '@/app/actions';
 import styles from './Write.module.scss';
 
 export const metadata = {
@@ -8,19 +11,22 @@ export const metadata = {
   description: 'Writing new entry',
 };
 
-export default async function Page({ params }) {
+export default async function Page({ searchParams }) {
   const heliosAuth = cookies().get('heliosAuth')?.value;
-  // if (!heliosAuth) return <Deauth />;
-  const userId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'userId');
-  // if (!userId) return <Deauth />;
-  // check if user exists
-  const entry = { id: '1', body: '' };
+  if (!heliosAuth) return <Deauth />;
+  const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
+  if (!travelerId) return <Deauth />;
+
+  const { s } = searchParams;
+  if (!s) return <ClientRenderWriteInput searchParams={searchParams} />;
+  const { payload } = await getEntryBySlug(s, travelerId);
+  if (payload.length === 0) redirect(`/entry-doesnt-exist?target=write&val=${s}`);
 
   return (
     <div className={styles.pageWrapper}>
-      <h1 className={styles.title}>{entry.title}</h1>
+      <h1 className={styles.title}>{payload.title}</h1>
 
-      <WriteInput id={entry.id} body={entry.body} />
+      <WriteInput id={payload.id} body={payload.body} />
     </div>
   );
 }

@@ -15,8 +15,8 @@ export default function RecoverAccount() {
     try {
       const query = `SELECT id, email_address
                     FROM traveler
-                    WHERE email_address = '${emailAddress}'`;
-      const { rows } = await client.query(query);
+                    WHERE email_address = $1`;
+      const { rows } = await client.query(query, [emailAddress]);
 
       console.log({ traveler: rows[0] });
 

@@ -50,6 +50,7 @@
       "error",
       "ignorePackages",
       {
+        "": "never",
         "mjs": "never",
         "jsx": "ignorePackages",
         "js": "ignorePackages"

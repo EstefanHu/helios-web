@@ -19,7 +19,7 @@ VALUES
     );
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at)
+	entry (title, body, traveler_id, created_at, updated_at, type)
 VALUES
 	(
 		'nam congue risus semper porta volutpat quam pede lobortis ligula sit amet',
@@ -32,11 +32,12 @@ Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat 
 Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2023-06-01 00:03:59',
-    '2023-06-01 00:03:59'
+    '2023-06-01 00:03:59',
+	'daily'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at)
+	entry (title, body, traveler_id, created_at, updated_at, type)
 VALUES
 	(
 		'volutpat eleifend donec ut dolor morbi',
@@ -45,22 +46,24 @@ VALUES
 Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2023-07-01 00:03:59',
-    '2023-07-01 00:03:59'
+    '2023-07-01 00:03:59',
+	'daily'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at)
+	entry (title, body, traveler_id, created_at, updated_at, type)
 VALUES
 	(
 		'in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in',
 		'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2023-07-02 00:03:59',
-    '2023-07-02 00:03:59'
+    '2023-07-02 00:03:59',
+	'daily'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at)
+	entry (title, body, traveler_id, created_at, updated_at, type)
 VALUES
 	(
 		'suspendisse potenti nullam porttitor lacus at turpis',
@@ -69,11 +72,12 @@ VALUES
 Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2023-12-25 00:03:59',
-    '2023-12-25 00:03:59'
+    '2023-12-25 00:03:59',
+	'daily'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at)
+	entry (title, body, traveler_id, created_at, updated_at, type)
 VALUES
 	(
 		'auctor gravida sem praesent id massa id nisl venenatis lacinia aenean sit amet',
@@ -84,11 +88,12 @@ Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turp
 Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-04 00:03:59',
-    '2024-01-05 00:03:59'
+    '2024-01-05 00:03:59',
+	'daily'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at)
+	entry (title, body, traveler_id, created_at, updated_at, type)
 VALUES
 	(
 		'proin at turpis a pede posuere',
@@ -107,11 +112,12 @@ Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibu
 Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-05 00:03:59',
-    '2024-01-05 00:03:59'
+    '2024-01-05 00:03:59',
+	'daily'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at)
+	entry (title, body, traveler_id, created_at, updated_at, type)
 VALUES
 	(
 		'sapien non mi integer ac neque duis bibendum morbi',
@@ -130,11 +136,12 @@ Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum
 Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-07 00:03:59',
-    '2024-01-08 00:03:59'
+    '2024-01-08 00:03:59',
+	'daily'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at)
+	entry (title, body, traveler_id, created_at, updated_at, type)
 VALUES
 	(
 		'augue a suscipit nulla elit ac nulla sed vel enim sit amet',
@@ -151,11 +158,12 @@ Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque liber
 Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-08 00:03:59',
-    '2024-01-08 00:03:59'
+    '2024-01-08 00:03:59',
+	'daily'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at)
+	entry (title, body, traveler_id, created_at, updated_at, type)
 VALUES
 	(
 		'volutpat sapien arcu sed augue aliquam erat volutpat in congue etiam',
@@ -166,11 +174,12 @@ In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat n
 Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-09 00:03:59',
-    '2024-01-09 00:03:59'
+    '2024-01-09 00:03:59',
+	'daily'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at)
+	entry (title, body, traveler_id, created_at, updated_at, type)
 VALUES
 	(
 		'nunc donec quis orci eget orci vehicula condimentum curabitur in libero ut',
@@ -181,5 +190,6 @@ In congue. Etiam justo. Etiam pretium iaculis justo.
 In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-10 00:03:59',
-    '2024-01-10 00:03:59'
+    '2024-01-10 00:03:59',
+	'daily'
 	);
