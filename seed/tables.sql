@@ -81,5 +81,6 @@ CREATE TABLE IF NOT EXISTS log (
   resource_link VARCHAR(100),
   created_at    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   traveler_id   UUID NOT NULL,
-  CONSTRAINT    fk_traveler FOREIGN KEY(traveler_id) REFERENCES traveler(id),
+  CONSTRAINT    fk_traveler FOREIGN KEY(traveler_id) REFERENCES traveler(id)
 );
+

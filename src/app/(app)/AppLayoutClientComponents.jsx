@@ -98,7 +98,6 @@ function SearchInput() {
   const handleSearch = async (e) => {
     e.preventDefault();
 
-    console.log(`Search: ${input}`);
     setInput('');
 
     router.push(`/search?s=${input}`);

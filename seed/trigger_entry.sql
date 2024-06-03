@@ -31,8 +31,8 @@ CREATE OR REPLACE FUNCTION generate_slug()
   AS
 $$
 BEGIN
-	NEW.slug = slugify(NEW.title);
-	return NEW;
+  NEW.slug = slugify(NEW.title);
+  return NEW;
 END;
 $$;
 

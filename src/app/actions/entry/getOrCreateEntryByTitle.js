@@ -5,8 +5,8 @@ import redis from '@/lib/config/redis.js';
 import { connectToDatabase } from '@/lib/config/postgres.js';
 const { pool } = connectToDatabase();
 
-export const getOrCreateEntryBySlug = async (slug) => {
-  if (!slug) return { code: 400 };
+export const getOrCreateEntryByTitle = async (title) => {
+  if (!title) return { code: 400 };
   const heliosAuth = cookies().get('heliosAuth')?.value;
   if (!heliosAuth) return { code: 401 };
   const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
@@ -14,12 +14,11 @@ export const getOrCreateEntryBySlug = async (slug) => {
 
   const client = await pool.connect();
   try {
-    const optimisticQuery = 'SELECT * FROM entry WHERE slug = $1 AND traveler_id = $2;';
-    const optimisticRes = await client.query(optimisticQuery, [slug, travelerId]);
+    const optimisticQuery = 'SELECT * FROM entry WHERE title = $1 AND traveler_id = $2;';
+    const optimisticRes = await client.query(optimisticQuery, [title, travelerId]);
     if (optimisticRes.rows.length === 0) {
-      // TODO: Adjust title format
-      const query = 'INSERT INTO entry(title, slug, traveler_id) VALUES ($1, $2, $3) RETURNING *;';
-      const { rows } = await client.query(query, [slug.replaceAll('-', ' '), slug, travelerId]);
+      const query = 'INSERT INTO entry(title, traveler_id) VALUES ($1, $2) RETURNING *;';
+      const { rows } = await client.query(query, [title, travelerId]);
 
       return { code: 200, payload: rows[0] };
     }

@@ -2,13 +2,14 @@
 import { useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { EntryStateContext } from '@/lib/context';
-import { getOrCreateEntryBySlug } from '@/app/actions';
+import { getOrCreateEntryByTitle } from '@/app/actions';
 import TextareaAutosize from 'react-textarea-autosize';
 import { RotatingLines } from 'react-loader-spinner';
 import { GoCheck } from 'react-icons/go';
 import { FaRegSave } from 'react-icons/fa';
-import styles from './WriteInput.module.scss';
-import { formatDate } from '@/lib/helpers/formatDate';
+import { dateToTitle } from '@/lib/helpers/date';
+import styles from './Write.module.scss';
+import { updateEntryBody } from '@/app/actions';
 
 const SaveStates = {
   SAVED: 'Saved',
@@ -18,23 +19,19 @@ const SaveStates = {
 
 let timer;
 
-const save = async (id, body, textRef, router, setSaveState) => {
-  if (body === textRef) return setSaveState(SaveStates.SAVED);
+const save = async ({ id, body, router, setSaveState, entryState, setEntryState }) => {
+  if (body === entryState.daily.body) return setSaveState(SaveStates.SAVED);
   setSaveState(SaveStates.SAVING);
-  const response = await fetch('/entry/update', {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, body }),
-  });
+  const { code } = await updateEntryBody(id, body);
+  setEntryState({ ...entryState, daily: { ...entryState.daily, body: body } });
   setSaveState(SaveStates.SAVED);
-  if (response.status === 307) router.push('/');
+  if (code === 307 || code === 401 || code === 440) router.push('/');
 };
 
 export function WriteInput({ id, body = '' }) {
   const router = useRouter();
   const inputRef = useRef(null);
-
-  const [textRef, setTextRef] = useState(body);
+  const { entryState, setEntryState } = useContext(EntryStateContext);
   const [currBody, setCurrBody] = useState(body);
   const [bodyCount, setBodyCount] = useState(body.split(' ').filter((n) => n != '').length);
   const [saveState, setSaveState] = useState(SaveStates.SAVED);
@@ -53,8 +50,7 @@ export function WriteInput({ id, body = '' }) {
         e.preventDefault();
         clearTimeout(timer);
         const body = inputRef.current?.value || '';
-        save(id, body, textRef, router, setSaveState);
-        setTextRef(body);
+        save({ id, body, router, setSaveState, entryState, setEntryState });
       } else if (e.key === 'Tab') {
         e.preventDefault();
         // TODO: Add Tab character
@@ -68,8 +64,7 @@ export function WriteInput({ id, body = '' }) {
     inputRef.current?.setSelectionRange(inputRef.current.value.length, inputRef.current.value.length);
 
     return () => document.removeEventListener('keydown', captureKeydown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [textRef]);
+  }, [id, router, entryState, setEntryState]);
 
   const setAutoSaveTimout = (newBody) => {
     setSaveState(SaveStates.WILL_SAVE);
@@ -78,15 +73,13 @@ export function WriteInput({ id, body = '' }) {
     setCurrBody(newBody);
     setBodyCount(newBody.split(' ').filter((n) => n != '').length);
     timer = setTimeout(async () => {
-      save(id, newBody, textRef, router, setSaveState);
-      setTextRef(newBody);
+      save({ id, body: currBody, router, setSaveState, entryState, setEntryState });
     }, 10000);
   };
 
   const forceSave = () => {
     clearTimeout(timer);
-    save(id, currBody, textRef, router, setSaveState);
-    setTextRef(currBody);
+    save({ id, body: currBody, router, setSaveState, entryState, setEntryState });
     inputRef.current?.focus();
   };
 
@@ -120,7 +113,7 @@ export function WriteInput({ id, body = '' }) {
           ) : saveState === 'Saving' ? (
             <RotatingLines strokeColor='#f3b04e' />
           ) : (
-            <FaRegSave onClick={forceSave} style={{ cursor: 'pointer' }} />
+            <FaRegSave onClick={() => forceSave(body)} style={{ cursor: 'pointer' }} />
           )}
         </span>
       </footer>
@@ -136,7 +129,7 @@ export function ClientRenderWriteInput({ searchParams }) {
   const { v } = searchParams;
 
   const getOrCreateDaily = useCallback(async () => {
-    const { payload } = await getOrCreateEntryBySlug(formatDate(new Date()));
+    const { payload } = await getOrCreateEntryByTitle(dateToTitle(new Date()));
     setEntryState({ ...entryState, daily: payload });
   }, [entryState, setEntryState]);
 
@@ -158,7 +151,7 @@ export function ClientRenderWriteInput({ searchParams }) {
 
   return (
     <div className={styles.pageWrapper}>
-      <h1 className={styles.title}>{entry.title}</h1>
+      <h1>{entry.title}</h1>
 
       <WriteInput id={entry.id} body={entry.body} />
     </div>

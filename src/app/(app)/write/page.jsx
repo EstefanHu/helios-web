@@ -24,7 +24,7 @@ export default async function Page({ searchParams }) {
 
   return (
     <div className={styles.pageWrapper}>
-      <h1 className={styles.title}>{payload.title}</h1>
+      <h1>{payload.title}</h1>
 
       <WriteInput id={payload.id} body={payload.body} />
     </div>
