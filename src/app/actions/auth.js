@@ -1,5 +1,4 @@
 'use server';
-
 import { cookies } from 'next/headers';
 import bcrypt from 'bcrypt';
 import { v4 as generateUUID } from 'uuid';
@@ -13,7 +12,7 @@ const setUserSession = async (travelerId) => {
   const key = `heliosTraveler:${token}`;
   const repeatedToken = await redis.exists(key);
   if (repeatedToken === 1) return setUserSession(travelerId);
-  await redis.hset(key, 'travelerId', travelerId);
+  await redis.hset(key, { travelerId });
   await redis.expire(key, Number(process.env.SESSIONS_TTL));
   cookies().set({
     name: 'heliosAuth',

@@ -3,9 +3,9 @@ import { createContext, useState } from 'react';
 import EntryStateContextProvider from './EntryStateContext';
 
 export const LayoutContext = createContext({});
-export const TravelerContext = createContext(null);
+export const TravelerContext = createContext({});
 
-export default function ContextProvider({ children, currentSession }) {
+export default function ContextProvider({ children, currentSession = {} }) {
   const [layout, setLayout] = useState({});
   const [traveler, setTraveler] = useState(currentSession);
 

@@ -9,7 +9,7 @@ export default function Deauth() {
   const { setTraveler } = useContext(TravelerContext);
 
   useEffect(() => {
-    setTraveler(null);
+    setTraveler({});
     logout();
     router.push('/');
   }, [setTraveler, router]);

@@ -12,7 +12,7 @@
     "postgres::drop": "chmod +x seed/_drop_database.sh && ./seed/_drop_database.sh"
   },
   "dependencies": {
-    "@vercel/kv": "^1.0.1",
+    "@vercel/kv": "^2.0.0",
     "bcrypt": "^5.1.1",
     "ioredis": "^5.4.1",
     "next": "^14.2.3",

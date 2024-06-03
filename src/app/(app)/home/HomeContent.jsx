@@ -10,7 +10,7 @@ export default function HomeContent() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!traveler) return;
+    if (Object.keys(traveler).length === 0) return;
     getHomeContent(traveler.travelerId).then((res) => {
       setRecentFeed([]);
       setIsLoading(false);

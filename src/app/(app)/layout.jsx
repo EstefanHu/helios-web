@@ -11,10 +11,10 @@ import styles from './layout.module.scss';
 const { pool } = connectToDatabase();
 
 export default async function AppLayout({ children }) {
-  const heliosAuth = cookies().get('heliosAuth');
-  if (!heliosAuth) return <Deauth />;
-  const travelerId = await redis.hget(`heliosTraveler:${heliosAuth.value}`, 'travelerId');
-  if (!travelerId) return <Deauth />;
+  const heliosAuth = cookies().get('heliosAuth')?.value;
+  if (!heliosAuth) return <HeliosDeauth />;
+  const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
+  if (!travelerId) return <HeliosDeauth />;
 
   const client = await pool.connect();
   const sessionQuery = `
@@ -74,3 +74,37 @@ const HeliosApp = ({ children, session }) => {
     </ContextProvider>
   );
 };
+
+export function HeliosDeauth() {
+  return (
+    <ContextProvider>
+      <div className={styles.wrapper}>
+        <nav className={styles.appNav}>
+          <AppNav />
+        </nav>
+
+        <main>
+          <header>
+            <PageName />
+
+            <span>
+              <HeaderWriteButton />
+
+              <Link href='/profile' className={styles.profile}>
+                <MdPersonOutline />
+              </Link>
+            </span>
+          </header>
+
+          <div className={styles.contentWrapper}>
+            <div className={styles.content}>
+              <Deauth />
+            </div>
+          </div>
+        </main>
+
+        <MobileAppNav />
+      </div>
+    </ContextProvider>
+  );
+}
