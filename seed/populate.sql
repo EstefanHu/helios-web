@@ -3,8 +3,8 @@ INSERT INTO
 VALUES
     (
         'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
-        'g.host@gmail.com',
-	'Gary Host',
+        'local@mail.com',
+	'Local Traveler',
         '$2b$10$RkQSoUqiyHCvQ06/Ak7mEeBm0zFKtA2ucWRf9AvrU2Fe50fOXo5bi'
     );
 

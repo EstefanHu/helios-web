@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ValidateEmailAddress } from '@/lib/helpers/validateEmailAddress.js';
-import { login } from '@/app/actions/auth.js';
+import { loginTraveler } from '@/app/actions';
 import styles from '../authLayout.module.scss';
 
 const DEFAULT_DATA = {
@@ -35,7 +35,7 @@ export default function ContinueForm() {
     const {
       code,
       payload: { message },
-    } = await login(emailAddress, password);
+    } = await loginTraveler(emailAddress, password);
     setIsLoading(false);
 
     if (code !== 200) return setErrorData({ emailAddress: message, password: message });

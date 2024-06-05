@@ -3,63 +3,109 @@
   flex-direction: column;
 
   form {
-    label {
-      font-size: 0.75rem;
-      display: block;
-      text-transform: uppercase;
-      font-weight: bold;
-      margin-bottom: 8px;
-      color: var(--accent);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+
+    .formHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h2 {
+        font-size: 2rem;
+        text-transform: capitalize;
+        margin-bottom: 20px;
+      }
     }
 
-    input {
+    hr {
       width: 100%;
-      height: 40px;
-      outline: none;
-      padding: 8.5px 14px;
-      border-radius: 5px;
-      transition: 0.1s;
-      margin-bottom: 10px;
-
-      &:hover {
-        border-color: grey;
-      }
-
-      &:focus {
-        border: 2px solid var(--accent);
-        padding: 8.5px 13px;
-      }
+      height: 2px;
+      border-top: 1px solid rgb(200, 200, 200);
+      margin-bottom: 20px;
     }
 
-    input[type='submit'] {
-      width: 100%;
-      height: 35px;
-      border-radius: 5px;
-      border: 2px solid var(--accent);
-      cursor: pointer;
-      background-color: var(--background);
-      color: var(--accent);
-      transition:
-        background-color 0.2s,
-        color 0.2s;
-
-      &:hover {
-        background-color: var(--accent);
-        color: var(--background);
-      }
-    }
-
-    h2 {
-      margin-bottom: 10px;
-    }
-
-    p {
+    span {
+      display: flex;
+      flex-direction: column;
       margin-bottom: 30px;
-      font-size: 0.75rem;
 
-      a {
-        color: var(--accent);
+      label {
+        font-size: 0.75rem;
+        display: block;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: var(--text);
+      }
+
+      input {
+        width: 100%;
+        height: 40px;
+        border: 1px solid rgb(200, 200, 200);
+        outline: none;
+        padding: 8.5px 14px;
+        border-radius: 5px;
+        transition: 0.1s;
+        margin-bottom: 4px;
+        max-width: 500px;
+
+        &:hover {
+          border-color: grey;
+        }
+
+        &:focus {
+          border: 2px solid var(--accent);
+          padding: 8.5px 13px;
+        }
+      }
+
+      p {
+        font-size: 0.75rem;
+        margin-top: 5px;
+
+        a {
+          color: var(--accent);
+        }
+      }
+    }
+
+    &.travelerForm {
+    }
+
+    &.passwordForm {
+      .ensureSecure {
+        font-size: 1rem;
+
+        a {
+          color: var(--accent);
+        }
       }
     }
   }
+
+  .logout {
+    width: 100%;
+    height: 35px;
+    border-radius: 5px;
+    border: 2px solid var(--accent);
+    cursor: pointer;
+    background-color: var(--background);
+    color: var(--accent);
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+
+    &:hover {
+      background-color: var(--accent);
+      color: var(--background);
+    }
+  }
+}
+
+.profileSubmitButton {
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 5px;
 }

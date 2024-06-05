@@ -1,7 +1,7 @@
 'use client';
 import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { logout } from '../actions/auth';
+import { logoutTraveler } from '@/app/actions';
 import { TravelerContext } from '@/lib/context';
 
 export default function Deauth() {
@@ -10,7 +10,7 @@ export default function Deauth() {
 
   useEffect(() => {
     setTraveler({});
-    logout();
+    logoutTraveler();
     router.push('/');
   }, [setTraveler, router]);
 

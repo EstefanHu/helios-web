@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ValidateEmailAddress } from '@/lib/helpers/validateEmailAddress.js';
-import { register } from '@/app/actions/auth.js';
+import { registerTraveler } from '@/app/actions';
 import styles from '../authLayout.module.scss';
 
 const DEFAULT_DATA = {
@@ -34,7 +34,7 @@ export default function StartForm() {
 
     setIsLoading(true);
     try {
-      const createTravelerResponse = await register(emailAddress, password);
+      const createTravelerResponse = await registerTraveler(emailAddress, password);
       if (createTravelerResponse.code !== 201) throw { code: createTravelerResponse.code };
       router.push('/home');
     } catch ({ code }) {
