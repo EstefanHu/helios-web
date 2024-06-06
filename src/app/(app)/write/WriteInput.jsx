@@ -81,7 +81,7 @@ export function WriteInput({ entry }) {
   const forceSave = () => {
     clearTimeout(timer);
     save({ id, body: currBody, router, setSaveState, entryState, setEntryState });
-    //inputRef.current?.focus();
+    inputRef.current?.focus();
   };
 
   const correctViewport = () => {
@@ -91,7 +91,7 @@ export function WriteInput({ entry }) {
 
   return (
     <>
-      <div className={styles.writeViewPort} onClick={() => inputRef.current.focus()}>
+      <>
         <h1>{title}</h1>
 
         <TextareaAutosize
@@ -102,7 +102,7 @@ export function WriteInput({ entry }) {
           onChange={(e) => setAutoSaveTimout(e.target.value)}
           onHeightChange={correctViewport}
         />
-      </div>
+      </>
 
       <footer className={styles.writeFooter} ref={scrollToBottom}>
         <p className={styles.count}>{bodyCount} words</p>

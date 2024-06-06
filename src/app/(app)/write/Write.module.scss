@@ -8,11 +8,6 @@
   flex-direction: column;
   overflow: scroll;
   background-color: var(--background);
-}
-
-.writeViewPort {
-  min-height: calc(100vh - 50px - var(--appHeaderHeight) - 40px); // screen - footer - header - padding top
-  height: fit-content;
 
   h1 {
     font-size: 2rem;
@@ -28,7 +23,9 @@
     padding: 10px 0;
     line-height: 32px;
     height: fit-content;
+    min-height: calc(100vh - 50px - var(--appHeaderHeight) - 40px); // screen - footer - header - padding top
     background-color: var(--background);
+    overflow: hidden;
 
     @media (max-width: 450px) {
       margin-bottom: 50px;
