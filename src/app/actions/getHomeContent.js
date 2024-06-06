@@ -1,5 +1,4 @@
 'use server';
-
 import { connectToDatabase } from '@/lib/config/postgres.js';
 const { pool } = connectToDatabase();
 

@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS entry (
   slug           VARCHAR(100),
   body           TEXT DEFAULT '',
   type           entry_type,
+  status         status_type DEFAULT 'active',
   created_at     TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at     TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   journey_id     UUID DEFAULT NULL,

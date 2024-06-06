@@ -1,9 +1,46 @@
 .homeWrapper {
-  section {
-    background-color: var(--component);
-    border-radius: 5px;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .callToCreate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 20px 30px;
-    margin-bottom: 30px;
+    border: 1px solid var(--borderColor);
+    border-radius: var(--border-radius);
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+    }
+
+    a {
+      width: 200px;
+      height: 45px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--accent);
+      border-radius: var(--border-radius);
+      text-transform: capitalize;
+      font-weight: bold;
+      color: var(--accent);
+      transition:
+        background-color 0.2s,
+        color 0.2s;
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--background);
+      }
+    }
   }
 }

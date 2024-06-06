@@ -12,7 +12,6 @@ export const getEntryBySlug = async (slug) => {
   if (!travelerId) return { code: 440 };
 
   const client = await pool.connect();
-
   try {
     const query = 'SELECT * FROM entry WHERE slug = $1 AND traveler_id = $2';
     const { rows } = await client.query(query, [slug, travelerId]);

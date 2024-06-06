@@ -19,7 +19,7 @@ VALUES
     );
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at, type)
+	entry (title, body, traveler_id, created_at, updated_at, type, status)
 VALUES
 	(
 		'nam congue risus semper porta volutpat quam pede lobortis ligula sit amet',
@@ -33,11 +33,12 @@ Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non m
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2023-06-01 00:03:59',
     '2023-06-01 00:03:59',
-	'daily'
+	'daily',
+	'inactive'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at, type)
+	entry (title, body, traveler_id, created_at, updated_at, type, status)
 VALUES
 	(
 		'volutpat eleifend donec ut dolor morbi',
@@ -47,11 +48,12 @@ Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan fe
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2023-07-01 00:03:59',
     '2023-07-01 00:03:59',
-	'daily'
+	'daily',
+	'inactive'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at, type)
+	entry (title, body, traveler_id, created_at, updated_at, type, status)
 VALUES
 	(
 		'in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in',
@@ -59,11 +61,12 @@ VALUES
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2023-07-02 00:03:59',
     '2023-07-02 00:03:59',
-	'daily'
+	'daily',
+	'inactive'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at, type)
+	entry (title, body, traveler_id, created_at, updated_at, type, status)
 VALUES
 	(
 		'suspendisse potenti nullam porttitor lacus at turpis',
@@ -73,11 +76,12 @@ Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2023-12-25 00:03:59',
     '2023-12-25 00:03:59',
-	'daily'
+	'daily',
+	'inactive'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at, type)
+	entry (title, body, traveler_id, created_at, updated_at, type, status)
 VALUES
 	(
 		'auctor gravida sem praesent id massa id nisl venenatis lacinia aenean sit amet',
@@ -89,11 +93,12 @@ Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-04 00:03:59',
     '2024-01-05 00:03:59',
-	'daily'
+	'daily',
+	'inactive'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at, type)
+	entry (title, body, traveler_id, created_at, updated_at, type, status)
 VALUES
 	(
 		'proin at turpis a pede posuere',
@@ -113,11 +118,12 @@ Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turp
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-05 00:03:59',
     '2024-01-05 00:03:59',
-	'daily'
+	'daily',
+	'inactive'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at, type)
+	entry (title, body, traveler_id, created_at, updated_at, type, status)
 VALUES
 	(
 		'sapien non mi integer ac neque duis bibendum morbi',
@@ -137,11 +143,12 @@ Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-07 00:03:59',
     '2024-01-08 00:03:59',
-	'daily'
+	'daily',
+	'inactive'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at, type)
+	entry (title, body, traveler_id, created_at, updated_at, type, status)
 VALUES
 	(
 		'augue a suscipit nulla elit ac nulla sed vel enim sit amet',
@@ -159,11 +166,12 @@ Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum pri
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-08 00:03:59',
     '2024-01-08 00:03:59',
-	'daily'
+	'daily',
+	'inactive'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at, type)
+	entry (title, body, traveler_id, created_at, updated_at, type, status)
 VALUES
 	(
 		'volutpat sapien arcu sed augue aliquam erat volutpat in congue etiam',
@@ -175,11 +183,12 @@ Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.'
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-09 00:03:59',
     '2024-01-09 00:03:59',
-	'daily'
+	'daily',
+	'inactive'
 	);
 
 INSERT INTO
-	entry (title, body, traveler_id, created_at, updated_at, type)
+	entry (title, body, traveler_id, created_at, updated_at, type, status)
 VALUES
 	(
 		'nunc donec quis orci eget orci vehicula condimentum curabitur in libero ut',
@@ -191,5 +200,6 @@ In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.',
     'a5515d28-b8fe-426b-b466-75c6e25fe6c0',
     '2024-01-10 00:03:59',
     '2024-01-10 00:03:59',
-	'daily'
+	'daily',
+	'inactive'
 	);
