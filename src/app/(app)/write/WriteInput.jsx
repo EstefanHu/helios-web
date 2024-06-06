@@ -7,7 +7,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { RotatingLines } from 'react-loader-spinner';
 import { GoCheck } from 'react-icons/go';
 import { FaRegSave } from 'react-icons/fa';
-import { dateToTitle } from '@/lib/helpers/date';
+import { dateToTitle, slugifyDate } from '@/lib/helpers/date';
 import styles from './Write.module.scss';
 import { updateEntryBody } from '@/app/actions';
 
@@ -28,7 +28,8 @@ const save = async ({ id, body, router, setSaveState, entryState, setEntryState 
   if (code === 307 || code === 401 || code === 440) router.push('/');
 };
 
-export function WriteInput({ id, body = '' }) {
+export function WriteInput({ entry }) {
+  const { id, title, body = '' } = entry;
   const router = useRouter();
   const inputRef = useRef(null);
   const { entryState, setEntryState } = useContext(EntryStateContext);
@@ -80,29 +81,28 @@ export function WriteInput({ id, body = '' }) {
   const forceSave = () => {
     clearTimeout(timer);
     save({ id, body: currBody, router, setSaveState, entryState, setEntryState });
-    inputRef.current?.focus();
+    //inputRef.current?.focus();
   };
 
   const correctViewport = () => {
     if (!shouldScroll) return;
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      // @ts-ignore - needed since instant enum was removed
-      // https://github.com/w3c/csswg-drafts/pull/8107
-      behavior: 'instant',
-    });
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' });
   };
 
   return (
     <>
-      <TextareaAutosize
-        autoFocus
-        className={styles.writeInput}
-        ref={inputRef}
-        value={currBody}
-        onChange={(e) => setAutoSaveTimout(e.target.value)}
-        onHeightChange={correctViewport}
-      />
+      <div className={styles.writeViewPort} onClick={() => inputRef.current.focus()}>
+        <h1>{title}</h1>
+
+        <TextareaAutosize
+          autoFocus
+          className={styles.writeInput}
+          ref={inputRef}
+          value={currBody}
+          onChange={(e) => setAutoSaveTimout(e.target.value)}
+          onHeightChange={correctViewport}
+        />
+      </div>
 
       <footer className={styles.writeFooter} ref={scrollToBottom}>
         <p className={styles.count}>{bodyCount} words</p>
@@ -131,6 +131,7 @@ export function ClientRenderWriteInput({ searchParams }) {
   const getOrCreateDaily = useCallback(async () => {
     const { payload } = await getOrCreateEntryByTitle(dateToTitle(new Date()));
     setEntryState({ ...entryState, daily: payload });
+    //router.push(`/write?v=daily&s=${slugifyDate(new Date())}`, undefined, { shallow: true });
   }, [entryState, setEntryState]);
 
   useEffect(() => {
@@ -151,9 +152,7 @@ export function ClientRenderWriteInput({ searchParams }) {
 
   return (
     <div className={styles.pageWrapper}>
-      <h1>{entry.title}</h1>
-
-      <WriteInput id={entry.id} body={entry.body} />
+      <WriteInput entry={entry} />
     </div>
   );
 }

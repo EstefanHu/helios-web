@@ -29,13 +29,12 @@
     flex-grow: 1;
     height: 100vh;
     overflow: hidden;
-    padding-bottom: 70px;
 
     header {
       position: sticky;
       width: inherit;
       top: 0;
-      height: 70px;
+      height: var(--appHeaderHeight);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -112,13 +111,13 @@
 
     .contentWrapper {
       overflow-y: scroll;
-      height: 100%;
+      height: calc(100vh - var(--appHeaderHeight));
 
       .content {
         width: 100%;
         max-width: 860px;
         margin: 0 auto;
-        padding: 40px 15px;
+        padding: 40px 15px 0;
       }
     }
   }

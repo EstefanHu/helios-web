@@ -4,7 +4,7 @@ import Link from 'next/link';
 import EntryListItem from './EntryListItem';
 import EntryMonthWrapper from './EntryMonthWrapper';
 import styles from './Archive.module.scss';
-import { getEntries, getEntryCount } from '@/app/actions/entries.js';
+import { getEntryCount, getEntryByTraveler } from '@/app/actions';
 import { TravelerContext } from '@/lib/context';
 import { RotatingLines } from 'react-loader-spinner';
 
@@ -21,22 +21,22 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getEntryCount(traveler.travelerId)
-      .then((res) => setTotalEntries(res.count))
+    getEntryCount()
+      .then(({ payload }) => setTotalEntries(payload))
       .catch((err) => console.error(err));
   }, [traveler]);
 
   useEffect(() => {
     setLoading(true);
-    getEntries(traveler.travelerId, limit, offset)
+    getEntryByTraveler({ travelerId: traveler.travelerId, limit, offset })
       .then((res) => {
         // if check is for avoiding concat on initial render,
         // which led to a duplicate entries bug
-        const { entries } = res;
+        const { payload } = res;
         if (offset === 0) {
-          setEntryList(entries);
+          setEntryList(payload);
         } else {
-          setEntryList((prev) => prev.concat(entries));
+          setEntryList((prev) => prev.concat(payload));
         }
       })
       .catch((err) => console.error(err))

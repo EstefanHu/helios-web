@@ -1,4 +1,5 @@
 .pageWrapper {
+  min-height: calc(100vh - 50px - var(--appHeaderHeight) - 40px); // screen - footer - header - padding top
   height: fit-content;
   width: 100%;
   max-width: 800px;
@@ -7,33 +8,38 @@
   flex-direction: column;
   overflow: scroll;
   background-color: var(--background);
+}
+
+.writeViewPort {
+  min-height: calc(100vh - 50px - var(--appHeaderHeight) - 40px); // screen - footer - header - padding top
+  height: fit-content;
 
   h1 {
     font-size: 2rem;
     font-weight: 600;
   }
-}
 
-.writeInput {
-  width: 100%;
-  outline: none;
-  resize: none;
-  flex-grow: 1;
-  font-size: 1.3rem;
-  padding: 10px 0;
-  line-height: 32px;
-  margin-bottom: 90px;
-  height: fit-content;
-  background-color: var(--background);
+  .writeInput {
+    width: 100%;
+    outline: none;
+    resize: none;
+    flex-grow: 1;
+    font-size: 1.3rem;
+    padding: 10px 0;
+    line-height: 32px;
+    height: fit-content;
+    background-color: var(--background);
 
-  @media (max-width: 450px) {
-    margin-bottom: 50px;
-    font-size: 1.1rem;
-    line-height: 1.25rem;
+    @media (max-width: 450px) {
+      margin-bottom: 50px;
+      font-size: 1.1rem;
+      line-height: 1.25rem;
+    }
   }
 }
 
 .writeFooter {
+  background-color: var(--background);
   width: calc(100vw - 100px);
   max-width: 800px;
   height: 50px;

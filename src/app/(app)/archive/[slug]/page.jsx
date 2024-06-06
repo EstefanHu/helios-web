@@ -1,4 +1,4 @@
-import { getEntry } from '@/app/actions/entries.js';
+import { getEntryBySlug } from '@/app/actions';
 import viewer from './viewer.module.scss';
 
 import { cookies } from 'next/headers';
@@ -17,7 +17,7 @@ export default async function Page({ params }) {
   const heliosAuth = cookies().get('heliosAuth')?.value;
   const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
 
-  const { payload } = await getEntry(params.slug, travelerId);
+  const { payload } = await getEntryBySlug(params.slug, travelerId);
   const entry = payload[0];
 
   return (

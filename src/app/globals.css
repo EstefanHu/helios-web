@@ -1,6 +1,7 @@
 :root {
   --border-radius: 6px;
   --headerHeight: 58px;
+  --appHeaderHeight: 70px;
   --max-width: 800px;
 
   --accent: #f3b04e;

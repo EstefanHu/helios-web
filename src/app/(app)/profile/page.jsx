@@ -3,7 +3,6 @@ import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { logoutTraveler, updateTraveler, updateTravelerPassword } from '@/app/actions';
 import { TravelerContext } from '@/lib/context';
-import ProfileSubmitButton from './ProfileSubmitButton';
 import styles from './Profile.module.scss';
 import Link from 'next/link';
 
@@ -29,10 +28,14 @@ export default function Profile() {
 
   const handleEmailUpdate = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
+    setIsLoading(false);
   };
 
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
     const { oldPassword, newPassword, confirmNewPassword } = passwordFormData;
     // TODO: Add TOAST
     if (!oldPassword || !newPassword || !confirmNewPassword) return;
@@ -54,8 +57,10 @@ export default function Profile() {
       <form className={styles.travelerForm} onSubmit={handleUpdate}>
         <div className={styles.formHeader}>
           <h2>traveler</h2>
-          <ProfileSubmitButton defaultState={travelerFormData} currState={travelerFormData} />
+          <input type='submit' value='update traveler' />
         </div>
+
+        <hr />
 
         <span>
           <label>name</label>
@@ -84,7 +89,7 @@ export default function Profile() {
       <form className={styles.passwordForm} onSubmit={handlePasswordUpdate}>
         <div className={styles.formHeader}>
           <h2>password</h2>
-          <ProfileSubmitButton defaultState={passwordFormData} currState={passwordFormData} />
+          <input type='submit' value='update password' />
         </div>
 
         <hr />
@@ -97,7 +102,7 @@ export default function Profile() {
             onChange={(e) => setPasswordFormData({ ...passwordFormData, oldPassword: e.target.value })}
           />
           <p>
-            Forgot your password? <Link href='/password-reset'>Click here.</Link>
+            Forgot your password? <Link href='/recover_account'>Click here.</Link>
           </p>
         </span>
 
@@ -120,7 +125,8 @@ export default function Profile() {
         </span>
 
         <p className={styles.ensureSecure}>
-          Ensure your password is secure by using best practices. <Link href='/secure-passwords'>Learn more.</Link>
+          Ensure your password is secure by using best practices.{' '}
+          <Link href='/creating-secure-passwords'>Learn more.</Link>
         </p>
       </form>
 

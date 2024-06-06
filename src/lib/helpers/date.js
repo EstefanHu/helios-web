@@ -1,6 +1,6 @@
 import { MONTHS } from '@/lib/constants/date';
 
-export const slugifyDate = (date) => {
+export const slugifyDateToNumber = (date) => {
   let d = new Date(date),
     month = '' + (d.getMonth() + 1),
     day = '' + d.getDate(),
@@ -23,6 +23,15 @@ const ordinateDate = (d) => {
     default:
       return 'th';
   }
+};
+
+export const slugifyDate = (date) => {
+  let d = new Date(date),
+    month = MONTHS[d.getMonth()].toLowerCase(),
+    day = d.getDate() + ordinateDate(d.getDate()),
+    year = '' + d.getFullYear();
+
+  return [month, day, year].join('-');
 };
 
 export const dateToTitle = (date) => {
