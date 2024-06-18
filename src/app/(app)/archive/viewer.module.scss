@@ -4,19 +4,25 @@
   }
 
   .viewerDetails {
-    margin-bottom: 2rem;
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 2rem;
 
     div {
       display: flex;
       gap: 0.5rem;
     }
 
-    .createdTimeDate {
-      flex-direction: row;
+    .dateGroup {
+      gap: 2.5rem;
+    }
+
+    .createdTimeDate,
+    a {
       color: var(--accent);
     }
 
