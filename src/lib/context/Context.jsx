@@ -1,19 +1,18 @@
 'use client';
 import { createContext, useState } from 'react';
-import EntryStateContextProvider from './EntryStateContext';
+import TravelerContextProvider from './TravelerContext';
+import DailyContextProvider from './DailyContext';
 
 export const LayoutContext = createContext({});
-export const TravelerContext = createContext({});
 
-export default function ContextProvider({ children, currentSession = {} }) {
+export default function ContextProvider({ children }) {
   const [layout, setLayout] = useState({});
-  const [traveler, setTraveler] = useState(currentSession);
 
   return (
     <LayoutContext.Provider value={{ layout, setLayout }}>
-      <TravelerContext.Provider value={{ traveler, setTraveler }}>
-        <EntryStateContextProvider>{children}</EntryStateContextProvider>
-      </TravelerContext.Provider>
+      <TravelerContextProvider>
+        <DailyContextProvider>{children}</DailyContextProvider>
+      </TravelerContextProvider>
     </LayoutContext.Provider>
   );
 }

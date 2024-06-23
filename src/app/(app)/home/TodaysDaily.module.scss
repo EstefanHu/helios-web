@@ -1,0 +1,40 @@
+.callToCreate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  span {
+    display: flex;
+    align-items: center;
+
+    svg {
+      height: 30px;
+      width: 30px;
+      margin-right: 20px;
+    }
+
+    h1 {
+      text-transform: capitalize;
+    }
+  }
+
+  a {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--accent);
+    border-radius: var(--border-radius);
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--accent);
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+
+    &:hover {
+      background-color: var(--accent);
+      color: var(--background);
+    }
+  }
+}

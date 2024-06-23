@@ -1,7 +1,12 @@
-import Link from 'next/link';
 import Deauth from '../Deauth';
-import getHomeContent from './getHomeContent';
+import { cookies } from 'next/headers';
+import redis from '@/lib/config/redis.js';
+import { connectToDatabase } from '@/lib/config/postgres.js';
+import TodaysDaily from './TodaysDaily';
+import ActiveEntries from './ActiveEntries';
+import HomeFeed from './HomeFeed';
 import styles from './Home.module.scss';
+const { pool } = connectToDatabase();
 
 export const metadata = {
   title: 'Home | Helios',
@@ -9,33 +14,41 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const { code, payload } = await getHomeContent();
-  if (code === 401 || code === 440) return <Deauth />;
+  const heliosAuth = cookies().get('heliosAuth')?.value;
+  if (!heliosAuth) return <Deauth />;
+  const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
+  if (!travelerId) return <Deauth />;
+
+  let activeEntries;
+  let logs;
+  const client = await pool.connect();
+  try {
+    const entryQuery = `
+                        SELECT * FROM entry
+                        WHERE status = 'active'
+                        AND traveler_id = $1
+                        ORDER BY created_at DESC;
+                       `;
+    activeEntries = (await client.query(entryQuery, [travelerId])).rows;
+    const logQuery = `
+                      SELECT * FROM log
+                      WHERE traveler_id = $1
+                      AND created_at >= date_trunc('month', current_date - interval '1 month')
+                      AND created_at < date_trunc('month', current_date)
+                      ORDER BY created_at DESC
+                     `;
+    logs = (await client.query(logQuery, [travelerId])).rows;
+  } catch (error) {
+    return <Deauth />;
+  } finally {
+    client.release();
+  }
 
   return (
     <div className={styles.homeWrapper}>
-      {payload.active.length === 0 ? <CallToCreate /> : <ActiveData data={payload.active} />}
+      <TodaysDaily activeEntries={activeEntries} />
+      <ActiveEntries activeEntries={activeEntries} />
+      <HomeFeed logs={logs} />
     </div>
   );
 }
-
-const CallToCreate = () => {
-  return (
-    <section className={styles.callToCreate}>
-      <h1>You have no active entries.</h1>
-      <p>Lets get you started!</p>
-      <Link href='/write'>create daily</Link>
-    </section>
-  );
-};
-
-const ActiveData = ({ data }) => {
-  return (
-    <section className={styles.activeData}>
-      <h1>Active Data</h1>
-      {data.map((d) => (
-        <h1 key={d.title}>{d.title}</h1>
-      ))}
-    </section>
-  );
-};

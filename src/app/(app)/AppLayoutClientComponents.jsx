@@ -8,15 +8,13 @@ import { BiSolidHomeHeart } from 'react-icons/bi';
 import { GiJourney, GiMirrorMirror } from 'react-icons/gi';
 import { IoIosMore } from 'react-icons/io';
 import { IoLibrary } from 'react-icons/io5';
-import { EntryStateContext } from '@/lib/context';
+import { DailyContext } from '@/lib/context';
 import { launchDailyEntry } from '@/lib/helpers/launchDailyEntry.js';
 
 import styles from './AppLayoutClientComponents.module.scss';
 
 function AppNav() {
-  const {
-    entryState: { daily },
-  } = useContext(EntryStateContext);
+  const { daily } = useContext(DailyContext);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -111,9 +109,7 @@ function SearchInput() {
 }
 
 function HeaderWriteButton() {
-  const {
-    entryState: { daily },
-  } = useContext(EntryStateContext);
+  const { daily } = useContext(DailyContext);
   const router = useRouter();
 
   return (

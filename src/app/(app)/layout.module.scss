@@ -30,7 +30,7 @@
     height: 100vh;
     overflow: hidden;
 
-    header {
+    & > header {
       position: sticky;
       width: inherit;
       top: 0;

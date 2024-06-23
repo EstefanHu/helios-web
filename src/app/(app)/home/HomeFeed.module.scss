@@ -1,0 +1,24 @@
+.stats {
+  padding: 20px;
+  border: 1px solid rgb(100, 100, 100);
+  border-radius: 10px;
+  display: flex;
+
+  span {
+    display: flex;
+    justify-content: space-between;
+
+    .visualizer {
+      flex-grow: 1;
+    }
+
+    .selector {
+      width: 100px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.feed {
+}

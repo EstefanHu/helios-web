@@ -26,6 +26,7 @@
     --text: #f3f3f3;
     --textLighter: rgba(242, 242, 242, 0.75);
     --component: #292929;
+    --componentBorder: 1px solid rgb(241, 241, 241);
   }
 }
 

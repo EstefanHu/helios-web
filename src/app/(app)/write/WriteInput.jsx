@@ -1,7 +1,7 @@
 'use client';
 import { useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { EntryStateContext } from '@/lib/context';
+import { DailyContext } from '@/lib/context';
 import { getOrCreateEntryByTitle } from '@/app/actions';
 import TextareaAutosize from 'react-textarea-autosize';
 import { RotatingLines } from 'react-loader-spinner';
@@ -19,11 +19,11 @@ const SaveStates = {
 
 let timer;
 
-const save = async ({ id, body, router, setSaveState, entryState, setEntryState }) => {
-  if (body === entryState.daily.body) return setSaveState(SaveStates.SAVED);
+const save = async ({ id, body, router, setSaveState, daily, setDaily }) => {
+  if (body === daily.daily.body) return setSaveState(SaveStates.SAVED);
   setSaveState(SaveStates.SAVING);
   const { code } = await updateEntryBody(id, body);
-  setEntryState({ ...entryState, daily: { ...entryState.daily, body: body } });
+  setDaily({ ...daily, daily: { ...daily.daily, body: body } });
   setSaveState(SaveStates.SAVED);
   if (code === 307 || code === 401 || code === 440) router.push('/');
 };
@@ -32,7 +32,7 @@ export function WriteInput({ entry }) {
   const { id, title, body = '' } = entry;
   const router = useRouter();
   const inputRef = useRef(null);
-  const { entryState, setEntryState } = useContext(EntryStateContext);
+  const { daily, setDaily } = useContext(DailyContext);
   const [currBody, setCurrBody] = useState(body);
   const [bodyCount, setBodyCount] = useState(body.split(' ').filter((n) => n != '').length);
   const [saveState, setSaveState] = useState(SaveStates.SAVED);
@@ -51,7 +51,7 @@ export function WriteInput({ entry }) {
         e.preventDefault();
         clearTimeout(timer);
         const body = inputRef.current?.value || '';
-        save({ id, body, router, setSaveState, entryState, setEntryState });
+        save({ id, body, router, setSaveState, daily, setDaily });
       } else if (e.key === 'Tab') {
         e.preventDefault();
         // TODO: Add Tab character
@@ -65,7 +65,7 @@ export function WriteInput({ entry }) {
     inputRef.current?.setSelectionRange(inputRef.current.value.length, inputRef.current.value.length);
 
     return () => document.removeEventListener('keydown', captureKeydown);
-  }, [id, router, entryState, setEntryState]);
+  }, [id, router, daily, setDaily]);
 
   const setAutoSaveTimout = (newBody) => {
     setSaveState(SaveStates.WILL_SAVE);
@@ -74,13 +74,13 @@ export function WriteInput({ entry }) {
     setCurrBody(newBody);
     setBodyCount(newBody.split(' ').filter((n) => n != '').length);
     timer = setTimeout(async () => {
-      save({ id, body: currBody, router, setSaveState, entryState, setEntryState });
+      save({ id, body: currBody, router, setSaveState, daily, setDaily });
     }, 10000);
   };
 
   const forceSave = () => {
     clearTimeout(timer);
-    save({ id, body: currBody, router, setSaveState, entryState, setEntryState });
+    save({ id, body: currBody, router, setSaveState, daily, setDaily });
     inputRef.current?.focus();
   };
 
@@ -122,17 +122,16 @@ export function WriteInput({ entry }) {
 }
 
 export function ClientRenderWriteInput({ searchParams }) {
-  const { entryState, setEntryState } = useContext(EntryStateContext);
-  const { daily } = entryState;
+  const { daily, setDaily } = useContext(DailyContext);
   const [entry, setEntry] = useState(null);
   const router = useRouter();
   const { v } = searchParams;
 
   const getOrCreateDaily = useCallback(async () => {
     const { payload } = await getOrCreateEntryByTitle(dateToTitle(new Date()));
-    setEntryState({ ...entryState, daily: payload });
+    setDaily(payload);
     //router.push(`/write?v=daily&s=${slugifyDate(new Date())}`, undefined, { shallow: true });
-  }, [entryState, setEntryState]);
+  }, [setDaily]);
 
   useEffect(() => {
     switch (v) {
