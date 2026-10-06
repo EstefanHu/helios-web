@@ -12,13 +12,14 @@ export const metadata = {
 };
 
 export default async function Page({ searchParams }) {
-  const heliosAuth = cookies().get('heliosAuth')?.value;
+  const resolvedSearchParams = await searchParams;
+  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
   if (!heliosAuth) return <Deauth />;
   const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
   if (!travelerId) return <Deauth />;
 
-  const { s } = searchParams;
-  if (!s) return <ClientRenderWriteInput searchParams={searchParams} />;
+  const { s } = resolvedSearchParams;
+  if (!s) return <ClientRenderWriteInput searchParams={resolvedSearchParams} />;
   const { payload } = await getEntryBySlug(s, travelerId);
   if (payload.length === 0) redirect(`/entry-doesnt-exist?target=write&val=${s}`);
 

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import Link from 'next/link';
 import { IoIosPartlySunny } from 'react-icons/io';
 import { DailyContext } from '@/lib/context';
@@ -8,12 +8,10 @@ import styles from './TodaysDaily.module.scss';
 
 export default function TodaysDaily({ activeEntries }) {
   const { daily } = useContext(DailyContext);
-  const [todaysDaily, setTodaysDaily] = useState({});
 
-  useEffect(() => {
-    let ssDaily = activeEntries.filter((entry) => entry.title === dateToTitle(new Date()))[0];
-    setTodaysDaily(ssDaily ? ssDaily : daily);
-  }, [activeEntries, daily, setTodaysDaily]);
+  // Derived during render rather than mirrored into state via an effect.
+  const ssDaily = activeEntries.filter((entry) => entry.title === dateToTitle(new Date()))[0];
+  const todaysDaily = (ssDaily ? ssDaily : daily) || {};
 
   return Object.keys(todaysDaily).length === 0 ? (
     <section className={styles.callToCreate}>

@@ -5,7 +5,7 @@ import { connectToDatabase } from '@/lib/config/postgres.js';
 const { pool } = connectToDatabase();
 
 export default async function getCurrentSession() {
-  const heliosAuth = cookies().get('heliosAuth')?.value;
+  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
   if (!heliosAuth) return { code: 401 };
   const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
   if (!travelerId) return { code: 440 };
@@ -29,7 +29,7 @@ export default async function getCurrentSession() {
 
     return { code: 200, traveler: rows[0] };
   } catch (error) {
-    return { error }, { status: 500 };
+    return ({ error }, { status: 500 });
   } finally {
     client.release();
   }

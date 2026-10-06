@@ -3,9 +3,9 @@ import { cookies } from 'next/headers';
 import redis from '@/lib/config/redis.js';
 
 export const logoutTraveler = async () => {
-  const heliosAuth = cookies().get('heliosAuth');
+  const heliosAuth = (await cookies()).get('heliosAuth');
   if (heliosAuth) await redis.del(`heliosTraveler:${heliosAuth.value}`);
-  cookies().delete('heliosAuth');
+  (await cookies()).delete('heliosAuth');
 
   return {
     code: 200,

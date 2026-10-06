@@ -9,7 +9,7 @@ export const setTravelerSession = async (travelerId) => {
   if (repeatedToken === 1) return setTravelerSession(travelerId);
   await redis.hset(key, { travelerId });
   await redis.expire(key, Number(process.env.SESSIONS_TTL));
-  cookies().set({
+  (await cookies()).set({
     name: 'heliosAuth',
     value: token,
     maxAge: process.env.SESSIONS_TTL,

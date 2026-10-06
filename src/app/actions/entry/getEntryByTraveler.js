@@ -6,7 +6,7 @@ import { connectToDatabase } from '@/lib/config/postgres.js';
 const { pool } = connectToDatabase();
 
 export const getEntryByTraveler = async ({ travelerId, limit = 1, offset = 0 }) => {
-  const heliosAuth = cookies().get('heliosAuth')?.value;
+  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
   if (!heliosAuth) return { code: 401 };
   const currTravelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
   if (!currTravelerId) return { code: 440 };

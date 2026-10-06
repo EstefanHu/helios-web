@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 const appRoutes = ['/home', '/write', '/profile', '/journey', '/reflect'];
 const authRoutes = ['/continue', '/start'];
 
-export default function middleware(req) {
+export default function proxy(req) {
   const hasAuthCookie = req.cookies.has('heliosAuth');
   const { pathname } = req.nextUrl;
   let response = NextResponse.next();

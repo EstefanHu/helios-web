@@ -18,7 +18,13 @@ export default function Home() {
   // limit is the # of entries to fetch at a time
   const limit = 5;
 
-  const [loading, setLoading] = useState(true);
+  // the request whose entries are currently resolved; while it lags behind the
+  // current one a fetch is in flight. Deriving the spinner this way avoids
+  // synchronously calling setState inside the effect below. The traveler is part
+  // of the key so switching travelers still shows the spinner.
+  const requestKey = `${traveler.travelerId}:${offset}`;
+  const [loadedKey, setLoadedKey] = useState(null);
+  const loading = loadedKey !== requestKey;
 
   useEffect(() => {
     getEntryCount()
@@ -27,9 +33,13 @@ export default function Home() {
   }, [traveler]);
 
   useEffect(() => {
-    setLoading(true);
+    // drop results from a superseded request (rapid clicking through
+    // pagination) instead of letting them race and clobber newer state
+    let cancelled = false;
+
     getEntryByTraveler({ travelerId: traveler.travelerId, limit, offset })
       .then((res) => {
+        if (cancelled) return;
         // if check is for avoiding concat on initial render,
         // which led to a duplicate entries bug
         const { payload } = res;
@@ -40,8 +50,14 @@ export default function Home() {
         }
       })
       .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, [traveler, offset]);
+      .finally(() => {
+        if (!cancelled) setLoadedKey(requestKey);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [traveler, offset, requestKey]);
 
   function fetchMoreEntries() {
     // updating the offset triggers the useEffect

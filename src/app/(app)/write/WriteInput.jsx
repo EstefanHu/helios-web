@@ -123,7 +123,6 @@ export function WriteInput({ entry }) {
 
 export function ClientRenderWriteInput({ searchParams }) {
   const { daily, setDaily } = useContext(DailyContext);
-  const [entry, setEntry] = useState(null);
   const router = useRouter();
   const { v } = searchParams;
 
@@ -138,14 +137,19 @@ export function ClientRenderWriteInput({ searchParams }) {
       case '':
       case null:
       case undefined:
+        // normalize the url, then fall through to load the daily entry
         router.push('/write?v=daily', undefined, { shallow: true });
       case 'daily':
-        Object.keys(daily).length === 0 ? getOrCreateDaily() : setEntry(daily);
+        if (Object.keys(daily).length === 0) getOrCreateDaily();
         break;
       default:
-        return router.push('/write?v=daily');
+        router.push('/write?v=daily');
     }
   }, [v, router, daily, getOrCreateDaily]);
+
+  // entry is always just the current daily entry, so derive it instead of
+  // mirroring it into component state from inside the effect
+  const entry = Object.keys(daily).length === 0 ? null : daily;
 
   if (!entry) return <h1>TODO: add loading skeleton</h1>;
 

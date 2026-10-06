@@ -11,7 +11,7 @@ import styles from './layout.module.scss';
 const { pool } = connectToDatabase();
 
 export default async function AppLayout({ children }) {
-  const heliosAuth = cookies().get('heliosAuth')?.value;
+  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
   if (!heliosAuth) return <HeliosDeauth />;
   const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
   if (!travelerId) return <HeliosDeauth />;
@@ -31,16 +31,24 @@ export default async function AppLayout({ children }) {
                   WHERE traveler.id = $1;
                 `;
 
+  let session;
+  let queryFailed = false;
+
   try {
     const sessionResponse = await client.query(sessionQuery, [travelerId]);
-
-    return <HeliosApp session={sessionResponse.rows[0]}>{children}</HeliosApp>;
+    session = sessionResponse.rows[0];
   } catch (error) {
     //TODO: Add failed login code path
-    return <h1>failure</h1>;
+    queryFailed = true;
   } finally {
     client.release();
   }
+
+  // JSX is constructed outside the try/catch on purpose -- React renders
+  // elements lazily, so wrapping them here would not catch render errors anyway.
+  if (queryFailed) return <h1>failure</h1>;
+
+  return <HeliosApp session={session}>{children}</HeliosApp>;
 }
 
 const HeliosApp = ({ children, session }) => {

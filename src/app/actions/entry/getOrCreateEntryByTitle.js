@@ -7,7 +7,7 @@ const { pool } = connectToDatabase();
 
 export const getOrCreateEntryByTitle = async (title) => {
   if (!title) return { code: 400 };
-  const heliosAuth = cookies().get('heliosAuth')?.value;
+  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
   if (!heliosAuth) return { code: 401 };
   const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
   if (!travelerId) return { code: 440 };

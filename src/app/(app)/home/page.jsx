@@ -14,7 +14,7 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const heliosAuth = cookies().get('heliosAuth')?.value;
+  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
   if (!heliosAuth) return <Deauth />;
   const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
   if (!travelerId) return <Deauth />;

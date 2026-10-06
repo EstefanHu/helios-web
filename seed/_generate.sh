@@ -18,6 +18,13 @@ db=heliosdb
 user=helios
 password=helios
 
+# Admin/maintenance connection. `psql` defaults to a database named after the
+# current OS user, which does not exist in every cluster -- always target
+# ${maintenance_db} explicitly for role/database level commands.
+maintenance_db="${MAINTENANCE_DB:-postgres}"
+superuser="${PGUSER:-$(whoami)}"
+admin="psql -U ${superuser} -d ${maintenance_db}"
+
 if pg_isready -h localhost -p $port | grep -v "accepting"; then
     echo -e "${warningRed}NOTICE:${color_off} Could not connect to ${yellow}postgres${color_off}."
     echo -e "Make sure ${yellow}postgres${color_off} is running on port ${port}"
@@ -28,14 +35,14 @@ echo -e "${bold}${underlineYellow}Generating seed data${reset}"
 echo
 
 should_create_role=true
-if psql postgres -tXAc "SELECT 1 FROM pg_roles WHERE rolname='${user}'" | grep -q 1; then
+if $admin -tXAc "SELECT 1 FROM pg_roles WHERE rolname='${user}'" | grep -q 1; then
     echo -e "${warningRed}NOTICE:${color_off} Role ${cyan}\`${user}\`${color_off} already exists!"
     read -p "Override permissions? (y/N) " -n 1 -r
     echo -e
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        psql -d "${db}" -qc "REASSIGN OWNED BY ${user} TO postgres"
+        psql -d "${db}" -qc "REASSIGN OWNED BY ${user} TO ${superuser}"
         psql -d "${db}" -qc "DROP OWNED BY ${user}"
-        psql -qc "DROP ROLE ${user}"
+        $admin -qc "DROP ROLE ${user}"
     else
         should_create_role=false
     fi
@@ -43,7 +50,7 @@ fi
 
 if $should_create_role; then
     echo -e "Creating role ${cyan}\`${user}\`${color_off} with password ${blue}\`${password}\`${color_off}"
-    psql -qc "CREATE ROLE ${user} SUPERUSER LOGIN PASSWORD '${password}'"
+    $admin -qc "CREATE ROLE ${user} SUPERUSER LOGIN PASSWORD '${password}'"
     echo -e
 fi
 
@@ -53,7 +60,7 @@ if psql -lqt | cut -d \| -f 1 | grep -qw ${db}; then
     read -p "Override and continue? (y/N) " -n 1 -r
     echo -e
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        psql -qc "DROP DATABASE ${db}"
+        $admin -qc "DROP DATABASE ${db}"
     else
         should_create_database=false
     fi
@@ -61,7 +68,7 @@ fi
 
 if $should_create_database; then
     echo -e "Creating database ${green}\`${db}\`${color_off}"
-    psql -qc "CREATE DATABASE ${db}"
+    $admin -qc "CREATE DATABASE ${db}"
 
     path_to_types="$(pwd)/seed/types.sql"
     path_to_tables="$(pwd)/seed/tables.sql"
