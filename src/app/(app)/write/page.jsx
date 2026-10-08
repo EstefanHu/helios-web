@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
-import redis from '@/lib/config/redis.js';
+import { getSession } from '@/lib/auth.js';
 import Deauth from '@/app/(app)/Deauth.jsx';
 import { WriteInput, ClientRenderWriteInput } from './WriteInput.jsx';
 import { getEntryBySlug } from '@/app/actions';
@@ -13,14 +12,12 @@ export const metadata = {
 
 export default async function Page({ searchParams }) {
   const resolvedSearchParams = await searchParams;
-  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
-  if (!heliosAuth) return <Deauth />;
-  const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
+  const { travelerId } = await getSession();
   if (!travelerId) return <Deauth />;
 
   const { s } = resolvedSearchParams;
   if (!s) return <ClientRenderWriteInput searchParams={resolvedSearchParams} />;
-  const { payload } = await getEntryBySlug(s, travelerId);
+  const { payload } = await getEntryBySlug(s);
   if (payload.length === 0) redirect(`/entry-doesnt-exist?target=write&val=${s}`);
 
   return (

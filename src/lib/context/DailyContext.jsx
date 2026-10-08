@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useReducer } from 'react';
+import { createContext, useCallback, useReducer } from 'react';
 
 const DailyReducer = (state, action) => {
   switch (action.type) {
@@ -19,9 +19,11 @@ const defaultState = {};
 export const DailyContext = createContext([]);
 
 export default function DailyContextProvider({ children }) {
-  const [daily, dispatch] = useReducer(DailyReducer, defaultState);
+  const [state, dispatch] = useReducer(DailyReducer, defaultState);
 
-  const setDaily = async (daily) => dispatch({ type: 'set_daily', payload: daily });
+  // dispatch is stable, so setDaily is too -- consumers can safely list it as an effect dependency
+  const setDaily = useCallback((daily) => dispatch({ type: 'set_daily', payload: daily }), []);
 
-  return <DailyContext.Provider value={{ daily, setDaily }}>{children}</DailyContext.Provider>;
+  // consumers get today's daily entry itself (or null until it is loaded), not the reducer state
+  return <DailyContext.Provider value={{ daily: state.daily ?? null, setDaily }}>{children}</DailyContext.Provider>;
 }

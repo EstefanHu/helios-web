@@ -1,14 +1,13 @@
 import { getEntryBySlug, getNextEntry, getPreviousEntry } from '@/app/actions';
-import { cookies } from 'next/headers';
-import redis from '@/lib/config/redis.js';
-
+import { getSession } from '@/lib/auth.js';
+import Deauth from '../../Deauth';
 import EntryContainer from '../EntryContainer';
 
 export default async function Page({ params }) {
-  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
-  const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
+  const { travelerId } = await getSession();
+  if (!travelerId) return <Deauth />;
 
-  const { payload } = await getEntryBySlug((await params).slug, travelerId);
+  const { payload } = await getEntryBySlug((await params).slug);
   const entry = payload[0];
 
   const previousEntry = (await getPreviousEntry(entry.created_at)).payload;

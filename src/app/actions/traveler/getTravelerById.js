@@ -1,22 +1,20 @@
 'use server';
-import { cookies } from 'next/headers';
-import redis from '@/lib/config/redis.js';
+import { getSession } from '@/lib/auth.js';
 import { connectToDatabase } from '@/lib/config/postgres.js';
 const { pool } = connectToDatabase();
 
-export async function getTravelerById(searchId) {
-  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
-  if (!heliosAuth) return { code: 401 };
-  const currTravelerId = await redis.hget(`heliosTravler:${heliosAuth}`, 'travelerId');
-  if (!currTravelerId) return { code: 401 };
+export async function getTravelerById() {
+  const { travelerId: currTravelerId, code } = await getSession();
+  if (!currTravelerId) return { code };
 
   const client = await pool.connect();
   try {
     let query = `
                   SELECT id, email_address, name
-                  WHERE traveler_id = $1;
+                  FROM traveler
+                  WHERE id = $1;
                 `;
-    const res = await client.query(query, [searchId ? searchId : currTravelerId]);
+    const res = await client.query(query, [currTravelerId]);
 
     return res.rows;
   } catch (error) {

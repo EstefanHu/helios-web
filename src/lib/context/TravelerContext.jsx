@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useReducer } from 'react';
+import { createContext, useCallback, useReducer } from 'react';
 
 const TravelerReducer = (state, action) => {
   switch (action.type) {
@@ -18,10 +18,10 @@ const defaultState = {};
 
 export const TravelerContext = createContext();
 
-export default function TravelerContextProvider({ children }) {
-  const [traveler, dispatch] = useReducer(TravelerReducer, defaultState);
+export default function TravelerContextProvider({ children, initialTraveler }) {
+  const [traveler, dispatch] = useReducer(TravelerReducer, initialTraveler ?? defaultState);
 
-  const setTraveler = async (traveler) => dispatch({ type: 'set_traveler', payload: traveler });
+  const setTraveler = useCallback((traveler) => dispatch({ type: 'set_traveler', payload: traveler }), []);
 
   return <TravelerContext.Provider value={{ traveler, setTraveler }}>{children}</TravelerContext.Provider>;
 }

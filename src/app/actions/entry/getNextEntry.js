@@ -1,27 +1,25 @@
 'use server';
-import { cookies } from 'next/headers';
-import redis from '@/lib/config/redis.js';
+import { getSession } from '@/lib/auth.js';
 
 import { connectToDatabase } from '@/lib/config/postgres.js';
 const { pool } = connectToDatabase();
 
 export const getNextEntry = async (currentEntryDate) => {
-  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
-  if (!heliosAuth) return { code: 401 };
-  const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
-  if (!travelerId) return { code: 440 };
+  const { travelerId, code } = await getSession();
+  if (!travelerId) return { code };
 
   const query = `
       SELECT *
       FROM entry
       WHERE created_at::DATE > $1::DATE
+      AND traveler_id = $2
       ORDER BY created_at::DATE ASC
       LIMIT 1;
     `;
 
   const client = await pool.connect();
   try {
-    const { rows } = await client.query(query, [currentEntryDate]);
+    const { rows } = await client.query(query, [currentEntryDate, travelerId]);
 
     return { code: 200, payload: rows[0] };
   } catch (error) {

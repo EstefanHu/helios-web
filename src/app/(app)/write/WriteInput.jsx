@@ -17,21 +17,27 @@ const SaveStates = {
   WILL_SAVE: 'WillSave',
 };
 
-let timer;
-
-const save = async ({ id, body, router, setSaveState, daily, setDaily }) => {
-  if (body === daily.daily.body) return setSaveState(SaveStates.SAVED);
+// lastSavedRef holds the body most recently persisted for this entry, so unchanged saves are skipped
+const save = async ({ id, body, router, setSaveState, lastSavedRef, daily, setDaily }) => {
+  if (body === lastSavedRef.current) return setSaveState(SaveStates.SAVED);
   setSaveState(SaveStates.SAVING);
   const { code } = await updateEntryBody(id, body);
-  setDaily({ ...daily, daily: { ...daily.daily, body: body } });
+  if (code === 307 || code === 401 || code === 440) return router.push('/');
+  if (code === 200) {
+    lastSavedRef.current = body;
+    // keep the cached daily entry in sync when it is the one being edited
+    if (daily?.id === id) setDaily({ ...daily, body });
+  }
   setSaveState(SaveStates.SAVED);
-  if (code === 307 || code === 401 || code === 440) router.push('/');
 };
 
 export function WriteInput({ entry }) {
   const { id, title, body = '' } = entry;
   const router = useRouter();
   const inputRef = useRef(null);
+  // per-instance autosave timer; a module-level timer would be shared by every WriteInput
+  const timerRef = useRef(null);
+  const lastSavedRef = useRef(body);
   const { daily, setDaily } = useContext(DailyContext);
   const [currBody, setCurrBody] = useState(body);
   const [bodyCount, setBodyCount] = useState(body.split(' ').filter((n) => n != '').length);
@@ -49,9 +55,9 @@ export function WriteInput({ entry }) {
     const captureKeydown = (e) => {
       if ((e.metaKey && e.key === 's') || (e.ctrlKey && e.key === 's')) {
         e.preventDefault();
-        clearTimeout(timer);
+        clearTimeout(timerRef.current);
         const body = inputRef.current?.value || '';
-        save({ id, body, router, setSaveState, daily, setDaily });
+        save({ id, body, router, setSaveState, lastSavedRef, daily, setDaily });
       } else if (e.key === 'Tab') {
         e.preventDefault();
         // TODO: Add Tab character
@@ -70,17 +76,18 @@ export function WriteInput({ entry }) {
   const setAutoSaveTimout = (newBody) => {
     setSaveState(SaveStates.WILL_SAVE);
     setShouldScroll(newBody.split(currBody)[0] === '');
-    clearTimeout(timer);
+    clearTimeout(timerRef.current);
     setCurrBody(newBody);
     setBodyCount(newBody.split(' ').filter((n) => n != '').length);
-    timer = setTimeout(async () => {
-      save({ id, body: currBody, router, setSaveState, daily, setDaily });
+    // save newBody, not currBody: currBody is still the value from before this keystroke
+    timerRef.current = setTimeout(() => {
+      save({ id, body: newBody, router, setSaveState, lastSavedRef, daily, setDaily });
     }, 10000);
   };
 
   const forceSave = () => {
-    clearTimeout(timer);
-    save({ id, body: currBody, router, setSaveState, daily, setDaily });
+    clearTimeout(timerRef.current);
+    save({ id, body: currBody, router, setSaveState, lastSavedRef, daily, setDaily });
     inputRef.current?.focus();
   };
 
@@ -140,22 +147,18 @@ export function ClientRenderWriteInput({ searchParams }) {
         // normalize the url, then fall through to load the daily entry
         router.push('/write?v=daily', undefined, { shallow: true });
       case 'daily':
-        if (Object.keys(daily).length === 0) getOrCreateDaily();
+        if (!daily) getOrCreateDaily();
         break;
       default:
         router.push('/write?v=daily');
     }
   }, [v, router, daily, getOrCreateDaily]);
 
-  // entry is always just the current daily entry, so derive it instead of
-  // mirroring it into component state from inside the effect
-  const entry = Object.keys(daily).length === 0 ? null : daily;
-
-  if (!entry) return <h1>TODO: add loading skeleton</h1>;
+  if (!daily) return <h1>TODO: add loading skeleton</h1>;
 
   return (
     <div className={styles.pageWrapper}>
-      <WriteInput entry={entry} />
+      <WriteInput entry={daily} />
     </div>
   );
 }

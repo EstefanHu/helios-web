@@ -1,6 +1,5 @@
 import Deauth from '../Deauth';
-import { cookies } from 'next/headers';
-import redis from '@/lib/config/redis.js';
+import { getSession } from '@/lib/auth.js';
 import { connectToDatabase } from '@/lib/config/postgres.js';
 import TodaysDaily from './TodaysDaily';
 import ActiveEntries from './ActiveEntries';
@@ -14,9 +13,7 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
-  if (!heliosAuth) return <Deauth />;
-  const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
+  const { travelerId } = await getSession();
   if (!travelerId) return <Deauth />;
 
   let activeEntries;

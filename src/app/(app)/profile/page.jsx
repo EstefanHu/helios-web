@@ -66,14 +66,14 @@ export default function Profile() {
           <label>name</label>
           <input
             type='text'
-            value={travelerFormData.name}
+            value={travelerFormData.name ?? ''}
             onChange={(e) => setTravelerFormData({ ...travelerFormData, name: e.target.value })}
           />
           <p>Your name is how we will refer to you. You can remove it at any time.</p>
         </span>
       </form>
 
-      <form className={styles.emailForm} action={handleEmailUpdate}>
+      <form className={styles.emailForm} onSubmit={handleEmailUpdate}>
         <div className={styles.formHeader}>
           <h2>email</h2>
         </div>

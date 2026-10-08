@@ -37,7 +37,7 @@ export default function Home() {
     // pagination) instead of letting them race and clobber newer state
     let cancelled = false;
 
-    getEntryByTraveler({ travelerId: traveler.travelerId, limit, offset })
+    getEntryByTraveler({ limit, offset })
       .then((res) => {
         if (cancelled) return;
         // if check is for avoiding concat on initial render,

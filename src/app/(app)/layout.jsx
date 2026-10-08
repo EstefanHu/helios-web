@@ -1,19 +1,16 @@
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 import { MdPersonOutline } from 'react-icons/md';
 import { AppNav, HeaderWriteButton, MobileAppNav, PageName } from './AppLayoutClientComponents';
 import Deauth from './Deauth';
 import { ContextProvider } from '@/lib/context';
-import redis from '@/lib/config/redis.js';
+import { getSession } from '@/lib/auth.js';
 import { connectToDatabase } from '@/lib/config/postgres.js';
 import styles from './layout.module.scss';
 
 const { pool } = connectToDatabase();
 
 export default async function AppLayout({ children }) {
-  const heliosAuth = (await cookies()).get('heliosAuth')?.value;
-  if (!heliosAuth) return <HeliosDeauth />;
-  const travelerId = await redis.hget(`heliosTraveler:${heliosAuth}`, 'travelerId');
+  const { travelerId } = await getSession();
   if (!travelerId) return <HeliosDeauth />;
 
   const client = await pool.connect();

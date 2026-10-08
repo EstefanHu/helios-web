@@ -12,9 +12,10 @@ export const setTravelerSession = async (travelerId) => {
   (await cookies()).set({
     name: 'heliosAuth',
     value: token,
-    maxAge: process.env.SESSIONS_TTL,
-    sameSite: 'Strict',
+    maxAge: Number(process.env.SESSIONS_TTL),
+    sameSite: 'strict',
     path: '/',
-    httpOnly: `${process.env.NODE_ENV !== 'development' && '; Secure'}`,
+    httpOnly: true,
+    secure: process.env.NODE_ENV !== 'development',
   });
 };
