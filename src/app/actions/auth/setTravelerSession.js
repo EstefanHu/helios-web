@@ -13,7 +13,7 @@ export const setTravelerSession = async (travelerId) => {
     name: 'heliosAuth',
     value: token,
     maxAge: Number(process.env.SESSIONS_TTL),
-    sameSite: 'strict',
+    sameSite: 'lax',
     path: '/',
     httpOnly: true,
     secure: process.env.NODE_ENV !== 'development',
